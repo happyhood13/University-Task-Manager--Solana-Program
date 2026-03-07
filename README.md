@@ -1,86 +1,69 @@
-# Primeros pasos en Solana
-![Banner](./images/SolanaBanner.jpg)
-Solana es una blockchain de capa 1, es decir, cuenta con su propia infraestructura y no depende de otras blockchains para funcionar. Se encuentra orientada al alto rendimiento, y fue creada para soportar aplicaciones descentralizadas a gran escala con costos mínimos y confirmaciones casi inmediatas. Su diseño prioriza la eficiencia en la ejecución y la paralelización de transacciones.
+🎓 University Task Manager (Solana Program)
+Este proyecto es un gestor de tareas universitarias descentralizado desarrollado en Rust utilizando el framework Anchor. Fue creado como proyecto final para la Certificación de Solana Developer.
 
-Rust es el lenguaje principal para desarrollar programas en Solana. A través de él se implementa la lógica on-chain utilizando el modelo de cuentas y programas de la red, permitiendo construir contratos inteligentes seguros, eficientes y altamente optimizables.
+📝 Descripción
+Como estudiante, la organización es clave. Este programa permite gestionar los pendientes de la universidad directamente en la blockchain de Solana. El sistema permite organizar las tareas por materia y asignarles una fecha de vencimiento, asegurando que cada registro sea único, inmutable y propiedad exclusiva del estudiante.
 
-Puedes comenzar dándole Fork a este repositorio (abajo te explicamos como 👇)
+Características Principales:
+Organización por Materia: Cada tarea está vinculada a una asignatura específica.
 
-Asegúrate de clonar este repositorio a tu cuenta usando el botón **`Fork`**.
+Control de Tiempo: Registro de fechas de entrega mediante timestamps de Unix.
 
-![fork](./images/fork.png)
+Seguridad: Solo el creador de la tarea (el estudiante) tiene permisos para modificarla o marcarla como completada.
 
-* Puedes renombrar el repositorio a lo que sea que se ajuste con tu proyecto.
+Eficiencia de Datos: Uso de PDAs para un almacenamiento estructurado y económico.
 
-## Solana Playground
-Solana Playground es un entorno de desarrollo online que permite escribir, compilar, desplegar y probar programas de Solana directamente desde el navegador, sin necesidad de instalar herramientas locales como Rust, Solana CLI o Anchor.
+🛠 Especificaciones Técnicas (Requisitos de Certificación)
+1. CRUD Completo
+El programa implementa las cuatro operaciones básicas:
 
-![Playground](./images/playground.png)
+Create: Función crear_tarea para inicializar el registro en la red.
 
-Para abrir el **Playground** solo es necesario dar clic 👉 [Aquí](https://beta.solpg.io)
+Read: Consulta de estados a través de PDAs derivados.
 
-## Configuración del entorno
+Update: Funciones marcar_completada y reprogramar_tarea para modificar el estado de los pendientes.
 
-Primero conectaremos el entorno con la devnet, lo que tambien procederá a la creación de una wallet. Para eso daremos clic en donde dice **Not Conected**:
+Delete: Función eliminar_tarea para cerrar la cuenta y recuperar los lamports de renta.
 
-![playground1](./images/playground1.png)
+2. Manejo de PDAs (Program Derived Addresses)
+Para este proyecto, las direcciones de las tareas se derivan de forma determinista utilizando las siguientes semillas:
 
-Saldrá la siguiente ventana donde daremos en el botón **Continue**:
+El string estático: "task"
 
-![wallet](./images/wallet.png)
+La llave pública del estudiante: estudiante.key()
 
-Como resultado se mostrará la siguiente información:
+El ID único de la tarea: id_tarea
 
-![status](./images/status.png)
+3. Estructura del Estado (TareaState)
+Rust
+pub struct TareaState {
+    pub estudiante: Pubkey,      // Dueño de la tarea (32 bytes)
+    pub id: u64,                // ID único (8 bytes)
+    pub materia: String,        // Nombre de la materia
+    pub descripcion: String,    // Detalle de la tarea
+    pub fecha_vencimiento: i64, // Timestamp de entrega (8 bytes)
+    pub completada: bool,       // Estado (1 byte)
+}
+🚀 Instalación y Uso
+Requisitos
+Rust
 
-* En verde: el estado de la conexión y el entorno al que se encuentra conectado
+Solana CLI
 
-* En amarillo: la la dirección de la wallet conectada
+Anchor Framework
 
-* En azul: la cantidad de tokens en la wallet
+Pasos
+Clonar el repositorio:
 
-> ℹ️ ¿Quieres ver el ejemplo de un "Hola Mundo" en Solana?. Da clic aquí: 👉 [Ver Ejemplo](./build-deploy/README.md)
+Bash
+git clone https://github.com/TU_USUARIO/university-task-manager.git
+Compilar el programa:
 
-> ℹ️ ¿Cuentas con una Wallet de [Phantom](https://phantom.com/) que deseas importar?, Da clic aquí para ver como hacerlo: 
+Bash
+anchor build
+Ejecutar los tests:
 
-👉 [Como Importar una Wallet](./import-key-a-playground/README.md)
-
-## ¿Listo para empezar?
-
-El primer paso es hacer `fork` al repositorio. Ya con el repositorio en tu cuenta lo siguiente que debes hacer es entrar a la carpeta `proyecto` y obtener el `permalink`:
-
-![permalink](./images/permalink.png)
-
-El cual uniremos con el siguiente enlace en nuestro navegador de preferencia:
-
-```url
-https://beta.solpg.io/
-```
-
-Lo que nos dará algo parecido a:
-
-![url](./images/url.png)
-
-Al pulsar enter seremos enviados al `Solana Playground` con nuestro proyecto abierto:
-
-![pg](./images/pg.png)
-
-Para guardarlo solo damos clic en el boton `import` y asignamos un nombre:
-
-![import](./images/import.png)
-
-## ¿Como actualizo mi repositorio?
-
-Una vez que realices cambios o termines tu proyecto, es necesario que **copies todo el código**, ya con el código en el portapapeles nos dirigimos nuevamente a la carpeta proyecto de tu repositorio de github **donde se obtuvo el `permalink`**, donde entraremos al carpeta `src` y al archivo `lib.rs`:
-
-![edit](./images/edit.png)
-
-En `lib.rs` presionaremos el ícono en forma de lapiz (esquina superior derecha de la imagen 👆)
-
-Nuevamente seleccionamos todo el código pero ahora presionamos `ctrl + v` para pegar el código del `Playground`. Ya realizados los cambios presionamos el botón `Commit changes`:
-
-![commit](./images/commit.png)
-
-Nos aparecerá un menú de confirmación donde nuevamente presionamos el botón `Commit changes`:
-
-![commit2](./images/commit2.png)
+Bash
+anchor test
+📄 Documentación de Código
+El código fuente en programs/task-manager/src/lib.rs cuenta con comentarios detallados que explican la lógica de cada instrucción y la gestión de memoria en Solana.
