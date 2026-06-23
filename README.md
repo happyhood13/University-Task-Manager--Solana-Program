@@ -56,7 +56,7 @@ Pasos
 Clonar el repositorio:
 
 Bash
-git clone https://github.com/TU_USUARIO/university-task-manager.git
+git clone https://github.com/happy_hood31/university-task-manager.git
 Compilar el programa:
 
 Bash
